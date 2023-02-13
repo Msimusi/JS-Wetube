@@ -7,3 +7,5 @@ const handleDeleteuser = (req, res) => res.send("Delete User");
 
 userRouter.get("/edit", handleEdituser);
 userRouter.get("/delete", handleDeleteuser);
+
+export default userRouter;
