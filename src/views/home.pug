@@ -1,7 +1,12 @@
-extends base.pug
+extends base
+include mixins/video
 
-block head 
-    title Home
 
 block content 
-    h1 Home!
+    h2 Welcome here you will see the trending videos!
+    
+    each potato in videos 
+        +video(potato)
+
+    else
+        li nothing's found
