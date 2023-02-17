@@ -1,5 +1,6 @@
 import User from "../models/User";
 import Video from "../models/Video";
+import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Join" });
@@ -42,18 +43,24 @@ export const getLogin = (req, res) => {
 };
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
-  const exists = await User.exists({ username });
+  const pageTitle = "login";
+  const user = await User.findOne({ username });
 
-  if (!exists) {
+  if (!user) {
     return res.status(400).render("login", {
-      pageTitle: "Login",
+      pageTitle,
       errorMessage: "An account with this username does not exists",
     });
   }
-  //   {
-  //     const videos = await Video.find({}).sort({ createdAt: "desc" });
-  //     return res.render("home", { pageTitle: "Home", videos });
-  //   }
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) {
+    return res.status(400).render("login", {
+      pageTitle,
+      errorMessage: "Wrong Password",
+    });
+  }
+  console.log("LOG USER IN! COMING SOON");
+  return res.redirect("/");
 };
 
 export const edit = (req, res) => res.send("Edit User");
