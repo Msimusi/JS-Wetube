@@ -5,5 +5,8 @@ extends base
 block content 
     h4 Change Title of video
     form(method="POST")
-        input(name="title" placeholder="Video Title", value=pageTitle)
+        input(name="title", placeholder="Title", value=video.title type="text", maxlength=30, required)
+        input(name="description", placeholder="Description", value=video.description type="text", minlength=20, required)
+        input(name="hashtags", placeholder="Hashtags, seperated by comma.", value=video.hashtags.join(), type="text" , required)
+
         input(value="save", type="submit")
