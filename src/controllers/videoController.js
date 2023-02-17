@@ -85,5 +85,10 @@ export const deleteVideo = async (req, res) => {
 };
 
 export const search = (req, res) => {
-  return res.render("Search");
+  const { keyword } = req.query;
+
+  if (keyword) {
+    // search
+  }
+  return res.render("Search", { pageTitle: "Search Video" });
 };
