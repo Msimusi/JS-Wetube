@@ -1,5 +1,4 @@
 import User from "../models/User";
-import Video from "../models/Video";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => {
