@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+// // 함수를 생성하는 경우.
+// export const formatHashtags = (hashtags) => {
+//   return hashtags
+//     .split(",")
+//     .map((word) =>
+//       word.trim().startsWith("#") ? word.trim() : `#${word.trim()}`
+//     );
+// };
+
 const videoSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -17,10 +26,21 @@ const videoSchema = new mongoose.Schema({
   },
 });
 
-videoSchema.pre("save", async function () {
-  this.hashtags = this.hashtags[0]
+// // MiddleWare가 저장하기 전에 포맷을 잡는 경우
+// videoSchema.pre("save", async function () {
+//   this.hashtags = this.hashtags[0]
+//     .split(",")
+//     .map((word) =>
+//       word.trim().startsWith("#") ? word.trim() : `#${word.trim()}`
+//     );
+// });
+
+videoSchema.static("formatHashtags", function (hashtags) {
+  return hashtags
     .split(",")
-    .map((word) => (word.startsWith("#") ? word : `#${word}`));
+    .map((word) =>
+      word.trim().startsWith("#") ? word.trim() : `#${word.trim()}`
+    );
 });
 
 const Video = mongoose.model("Video", videoSchema);
