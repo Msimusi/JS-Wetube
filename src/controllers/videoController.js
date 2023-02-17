@@ -5,10 +5,10 @@ import Video from "../models/Video";
 // 홈
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({});
+    const videos = await Video.find({}).sort({ createdAt: "desc" });
     return res.render("home", { pageTitle: "Home", videos });
   } catch {
-    return res.render("server-error");
+    return res.render("404");
   }
 };
 
@@ -77,8 +77,13 @@ export const postUpload = async (req, res) => {
   }
 };
 
-export const search = (req, res) => res.send("Search");
-
 // 비디오 삭제
-export const deleteVideo = (req, res) =>
-  res.render("deletevideo", { pageTitle: "Delete Video!" });
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
+  return res.redirect("/");
+};
+
+export const search = (req, res) => {
+  return res.render("Search");
+};
