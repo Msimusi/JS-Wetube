@@ -63,12 +63,6 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
-export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Delete User");
-export const logout = (req, res) => {
-  req.session.destroy();
-  return res.redirect("/");
-};
 export const see = (req, res) => res.send("see");
 
 export const startGithubLogin = (req, res) => {
@@ -128,7 +122,9 @@ export const finishGithubLogin = async (req, res) => {
     }
 
     let user = await User.findOne({ email: emailObj.email });
+
     if (!user) {
+      console.log("error: user!");
       user = await User.create({
         avatarUrl: userData.avatarUrl,
         name: userData.name ? userData.name : "Unknown",
@@ -146,4 +142,18 @@ export const finishGithubLogin = async (req, res) => {
   } else {
     return res.redirect("/login");
   }
+};
+
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+
+export const postEdit = (req, res) => {
+  return res.render("edit-profile");
+};
+export const remove = (req, res) => res.send("Delete User");
+
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
 };
