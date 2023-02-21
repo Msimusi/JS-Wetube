@@ -1,6 +1,8 @@
 extends base
 
 block content
+    if errorMessage
+        h3=errorMessage
     form(method="POST")
         input(name="name" type="text", required, value=loggedInUser.name,placeholder="Name")
         input(name="email" type="email", required, value=loggedInUser.email, placeholder="Email")
