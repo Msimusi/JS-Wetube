@@ -62,8 +62,6 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
-export const see = (req, res) => res.send("see");
-
 export const startGithubLogin = (req, res) => {
   const baseUrl = `https://github.com/login/oauth/authorize`;
   const config = {
@@ -76,6 +74,7 @@ export const startGithubLogin = (req, res) => {
   return res.redirect(finalUrl);
 };
 
+// 깃허브 로그인 종료
 export const finishGithubLogin = async (req, res) => {
   const baseUrl = "https://github.com/login/oauth/access_token";
   const config = {
@@ -146,13 +145,17 @@ export const getEdit = (req, res) => {
   return res.render("./users/edit-profile", { pageTitle: "Edit Profile" });
 };
 
+// 프로필 수정
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id, email: sessionEmail, username: sessionUsername },
+      user: { _id, avatarUrl, email: sessionEmail, username: sessionUsername },
     },
     body: { name, email, username, location },
+    file,
   } = req;
+
+  // 중복 검증
   let searchParam = [];
   if (sessionEmail !== email) {
     searchParam.push({ email });
@@ -169,9 +172,12 @@ export const postEdit = async (req, res) => {
       });
     }
   }
+
+  // 유저프로필 업데이트
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,
@@ -181,6 +187,7 @@ export const postEdit = async (req, res) => {
   );
 
   req.session.user = updateUser;
+
   return res.redirect("/users/edit");
 };
 
@@ -226,3 +233,4 @@ export const postChangePassword = async (req, res) => {
   // send notification
   return res.redirect("/users/logout");
 };
+export const see = (req, res) => res.send("see");

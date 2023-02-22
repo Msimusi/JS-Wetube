@@ -3,6 +3,7 @@ extends base
 
 
 block content 
+    video(src="/"+video.fileUrl, controls, width="800", height="450")
     div
         p=video.description
         small=video.createdAt
