@@ -16,15 +16,15 @@ export const home = async (req, res) => {
 //비디오 시청
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id);
-  const owner = await User.findById(video.owner);
+  const video = await Video.findById(id).populate("owner");
+
   // 비디오 없음 에러
   if (!video) {
     return res.render("404", { pageTitle: "Video not found" });
   }
 
   // 최종결과
-  return res.render("watch", { pageTitle: video.title, video, owner });
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 // 비디오 수정
