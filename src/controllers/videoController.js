@@ -1,3 +1,4 @@
+import User from "../models/User";
 import Video from "../models/Video";
 
 // Video.find({}, (error, videos) => {})
@@ -16,14 +17,14 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
-
+  const owner = await User.findById(video.owner);
   // 비디오 없음 에러
   if (!video) {
     return res.render("404", { pageTitle: "Video not found" });
   }
 
   // 최종결과
-  return res.render("watch", { pageTitle: video.title, video });
+  return res.render("watch", { pageTitle: video.title, video, owner });
 };
 
 // 비디오 수정
@@ -33,7 +34,10 @@ export const getEdit = async (req, res) => {
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
-  return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
+  return res.render("edit", {
+    pageTitle: `Edit: ${video.title}`,
+    video,
+  });
 };
 
 export const postEdit = async (req, res) => {
@@ -61,13 +65,20 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  const { path: fileUrl } = req.file;
-  const { title, description, hashtags } = req.body;
+  const {
+    file: { path: fileUrl },
+    body: { title, description, hashtags },
+    session: {
+      user: { _id: owner },
+    },
+  } = req;
+
   try {
     await Video.create({
       title,
       description,
       fileUrl,
+      owner,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");

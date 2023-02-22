@@ -142,7 +142,7 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const getEdit = (req, res) => {
-  return res.render("./users/edit-profile", { pageTitle: "Edit Profile" });
+  return res.render("users/edit-profile", { pageTitle: "Edit Profile" });
 };
 
 // 프로필 수정
@@ -166,7 +166,7 @@ export const postEdit = async (req, res) => {
   if (searchParam.length > 0) {
     const foundUser = await User.findOne({ $or: searchParam });
     if (foundUser && foundUser._id.toString() !== _id) {
-      return res.status(404).render("./users/edit-profile", {
+      return res.status(404).render("users/edit-profile", {
         pageTitle: "Edit Profile",
         errorMessage: "This username/email is already taken.",
       });
@@ -199,7 +199,7 @@ export const logout = (req, res) => {
 };
 
 export const getChangePassword = (req, res) => {
-  return res.render("./users/change-password", {
+  return res.render("users/change-password", {
     pageTitle: "Change Password",
   });
 };
@@ -233,4 +233,15 @@ export const postChangePassword = async (req, res) => {
   // send notification
   return res.redirect("/users/logout");
 };
-export const see = (req, res) => res.send("see");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User Not Found" });
+  }
+
+  return res.render("users/profile", {
+    pageTitle: user.name,
+    user,
+  });
+};

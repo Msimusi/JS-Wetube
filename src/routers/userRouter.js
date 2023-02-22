@@ -20,7 +20,6 @@ const userRouter = express.Router();
 
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
-userRouter.get("/:id(\\d+)", see);
 userRouter
   .route("/change-password")
   .all(protectorMiddleware)
@@ -32,7 +31,7 @@ userRouter
   .all(protectorMiddleware)
   .get(getEdit)
   .post(avatarUpload.single("avatar"), postEdit);
-
 userRouter.get("/remove", remove).all(protectorMiddleware);
+userRouter.get("/:id([0-9a-f]{24})", see);
 
 export default userRouter;
