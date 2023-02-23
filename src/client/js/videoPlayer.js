@@ -7,6 +7,8 @@ const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("volume");
 const timeLine = document.getElementById("timeLine");
 
+let videoPlayStatus = false;
+let setVideoPlayStatus = false;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
@@ -56,16 +58,39 @@ const handleTimeUpdate = () => {
   timeLine.value = Math.floor(video.currentTime);
 };
 
-const handleTimeline = (event) => {
+const handleTimelineChange = (event) => {
   const {
     target: { value },
   } = event;
+  if (!setVideoPlayStatus) {
+    videoPlayStatus = video.paused ? false : true;
+    setVideoPlayStatus = true;
+  }
+  video.pause();
   video.currentTime = value;
 };
 
+const handleTimelineSet = () => {
+  videoPlayStatus ? video.play() : video.pause();
+  setVideoPlayStatus = false;
+};
+
+const handleVideoEnded = () => {
+  video.currentTime = 0;
+  playBtn.innerText = "Play";
+  timeLine.value = 0;
+};
+
 playBtn.addEventListener("click", handlePlayClick);
+window.addEventListener("keydown", function (event) {
+  if (event.code == "Space") {
+    handlePlayClick();
+  }
+});
 mute.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
-timeLine.addEventListener("input", handleTimeline);
+timeLine.addEventListener("input", handleTimelineChange);
+timeLine.addEventListener("change", handleTimelineSet);
+video.addEventListener("ended", handleVideoEnded);
