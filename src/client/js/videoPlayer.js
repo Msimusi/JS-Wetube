@@ -5,7 +5,12 @@ const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("volume");
 const timeLine = document.getElementById("timeLine");
+const fullScreenBtn = document.getElementById("fullscreen");
+const videoContainer = document.getElementById("videoContainer");
+const videoControls = document.getElementById("videoControls");
 
+let controlsMovementTimeout = null;
+let controlsTimeout = null;
 let videoPlayStatus = false;
 let setVideoPlayStatus = false;
 let volumeValue = 0.5;
@@ -92,10 +97,45 @@ const handleVideoEnded = () => {
   playBtn.innerText = "Play";
 };
 
+const handleFullScreen = () => {
+  const fullscreen = document.fullscreenElement;
+
+  if (fullscreen) {
+    document.exitFullscreen();
+    fullScreenBtn.innerText = "Enter Fullscreen";
+  } else {
+    videoContainer.requestFullscreen();
+    fullScreenBtn.innerText = "Exit Fullscreen";
+  }
+};
+
+const hideControls = () => {
+  videoControls.classList.remove("showing");
+};
+
+const handleMouseMove = () => {
+  console.log(controlsMovementTimeout);
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout);
+    controlsTimeout = null;
+  }
+  if (controlsMovementTimeout) {
+    clearTimeout(controlsMovementTimeout);
+    controlsMovementTimeout = null;
+  }
+  videoControls.classList.add("showing");
+  controlsMovementTimeout = setTimeout(hideControls, 3000);
+};
+const handleMouseLeave = () => {
+  console.log(controlsTimeout);
+  controlsTimeout = setTimeout(hideControls, 3000);
+};
+
 // 플레이, 일시정지
 playBtn.addEventListener("click", handlePlayClick); // 플레이/일시정지 버튼
 window.addEventListener("keydown", handlePlayBySpace); //Enter를 입력 시 플레이/일시정지
 video.addEventListener("keydown", handlePlayBySpace); //Enter를 입력 시 플레이/일시정지
+video.addEventListener("click", handlePlayClick); //Enter를 입력 시 플레이/일시정지
 
 // 볼륨
 muteBtn.addEventListener("click", handleMuteClick); // 음소거 버튼 On/Off
@@ -107,3 +147,8 @@ video.addEventListener("timeupdate", handleTimeUpdate); // 시간이 업데이�
 timeLine.addEventListener("input", handleTimelineChange); // 타임라인을 갱신하여 플레이타임 갱신
 timeLine.addEventListener("change", handleTimelineSet); // 타임라인을 조작해도 재생/일시정지 값 유지
 video.addEventListener("ended", handleVideoEnded); // 비디오 끝났을 때 초기화
+
+//기타
+fullScreenBtn.addEventListener("click", handleFullScreen); // 전체화면 버튼 on/Off
+video.addEventListener("mousemove", handleMouseMove); // 마우스가 위에서 움직일 때 컨트롤러 보여주기
+video.addEventListener("mouseleave", handleMouseLeave); // 마우스가 떨어지면 컨트롤러 감춤

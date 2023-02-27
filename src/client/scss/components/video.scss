@@ -1,4 +1,8 @@
 // video mixin
+video::-webkit-media-controls {
+  display: none !important;
+}
+
 .video-mixin {
   .video-mixin__thumb {
     height: 140px;
