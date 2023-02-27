@@ -30,12 +30,6 @@ const handlePlayClick = () => {
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
-const handlePlayBySpace = (event) => {
-  if (event.code == "Space") {
-    handlePlayClick();
-  }
-};
-
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 볼륨 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ //
 const handleMuteClick = () => {
   if (volumeValue != 0 && !video.muted) {
@@ -72,10 +66,13 @@ handleVolumeChange = (event) => {
   video.volume = value;
 };
 
-const handleMuteByM = (event) => {
-  if (event.keyCode === 77) {
-    handleMuteClick();
-  }
+const handleVolumeByArrow = (volume) => {
+  volumeValue += volume;
+  volumeValue = volumeValue > 1 ? (volumeValue = 1) : volumeValue;
+  volumeValue = volumeValue < 0 ? (volumeValue = 0) : volumeValue;
+
+  volumeRange.value = volumeValue;
+  video.volume = volumeValue;
 };
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 타임라인 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ //
@@ -118,6 +115,11 @@ const handleVideoEnded = () => {
   playBtn.innerText = "Play";
 };
 
+const handleTimelineByArrow = (seconds) => {
+  video.currentTime += seconds;
+};
+
+// 기타
 const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement;
 
@@ -152,14 +154,11 @@ const handleMouseLeave = () => {
 
 // 플레이, 일시정지
 playBtn.addEventListener("click", handlePlayClick); // 플레이/일시정지 버튼
-window.addEventListener("keydown", handlePlayBySpace); //Space를 입력 시 플레이/일시정지
-// video.addEventListener("keydown", handlePlayBySpace); //Space를 입력 시 플레이/일시정지
 video.addEventListener("click", handlePlayClick); //비디오 클릭시 시 플레이/일시정지
 
 // 볼륨
 muteBtn.addEventListener("click", handleMuteClick); // 음소거 버튼 On/Off
 volumeRange.addEventListener("input", handleVolumeChange); // 볼륨 라인 조작
-document.addEventListener("keyup", handleMuteByM);
 
 // 타임라인
 video.addEventListener("loadeddata", handleLoadedMetadata); // 메타데이터에서 비디오지속시간 받아오기
@@ -172,3 +171,37 @@ video.addEventListener("ended", handleVideoEnded); // 비디오 끝났을 때 �
 
 //기타
 fullScreenBtn.addEventListener("click", handleFullScreen); // 전체화면 버튼 on/Off
+window.addEventListener("keyup", (event) => {
+  if (event.key === "m") {
+    // M 누르면 음소거 on/off
+    handleMuteClick();
+  }
+
+  if (event.key === "f") {
+    // f 누르면 전체화면 on/off
+    handleFullScreen();
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (event.code == "Space") {
+    // 스페이스 재생, 일시정지
+    handlePlayClick();
+  }
+  if (event.key === "ArrowUp") {
+    // 위 화살표 볼륨 업
+    handleVolumeByArrow(0.1);
+  }
+  if (event.key === "ArrowDown") {
+    // 아래 화살표 볼륨 다운
+    handleVolumeByArrow(-0.1);
+  }
+
+  if (event.key === "ArrowRight") {
+    // 왼쪽 화살표 시간 되감기
+    handleTimelineByArrow(5);
+  }
+  if (event.key === "ArrowLeft") {
+    // 오른쪽 화살표 시간 빨리감기
+    handleTimelineByArrow(-5);
+  }
+});
