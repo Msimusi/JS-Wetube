@@ -1,5 +1,4 @@
 const video = document.querySelector("video");
-
 const playBtn = document.getElementById("play");
 const muteBtn = document.getElementById("mute");
 const currentTime = document.getElementById("currentTime");
@@ -12,8 +11,9 @@ let setVideoPlayStatus = false;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
-const handlePlayClick = (e) => {
-  // if video was playing, pause, vice versa
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 재생/일시정지 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ //
+
+const handlePlayClick = () => {
   if (video.paused) {
     video.play();
   } else {
@@ -22,7 +22,14 @@ const handlePlayClick = (e) => {
   playBtn.innerText = video.paused ? "Play" : "Pause";
 };
 
-const handleMuteClick = (e) => {
+const handlePlayBySpace = (event) => {
+  if (event.code == "Space") {
+    handlePlayClick();
+  }
+};
+
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 볼륨 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ //
+const handleMuteClick = () => {
   if (video.muted) {
     video.muted = false;
   } else {
@@ -45,6 +52,8 @@ handleVolumeChange = (event) => {
   video.volume = value;
 };
 
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 타임라인 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ //
+
 const formatTime = (seconds) =>
   new Date(seconds * 1000).toISOString().substring(14, 19);
 
@@ -62,10 +71,12 @@ const handleTimelineChange = (event) => {
   const {
     target: { value },
   } = event;
+
   if (!setVideoPlayStatus) {
     videoPlayStatus = video.paused ? false : true;
     setVideoPlayStatus = true;
   }
+
   video.pause();
   video.currentTime = value;
 };
@@ -77,20 +88,22 @@ const handleTimelineSet = () => {
 
 const handleVideoEnded = () => {
   video.currentTime = 0;
-  playBtn.innerText = "Play";
   timeLine.value = 0;
+  playBtn.innerText = "Play";
 };
 
-playBtn.addEventListener("click", handlePlayClick);
-window.addEventListener("keydown", function (event) {
-  if (event.code == "Space") {
-    handlePlayClick();
-  }
-});
-mute.addEventListener("click", handleMuteClick);
-volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadedmetadata", handleLoadedMetadata);
-video.addEventListener("timeupdate", handleTimeUpdate);
-timeLine.addEventListener("input", handleTimelineChange);
-timeLine.addEventListener("change", handleTimelineSet);
-video.addEventListener("ended", handleVideoEnded);
+// 플레이, 일시정지
+playBtn.addEventListener("click", handlePlayClick); // 플레이/일시정지 버튼
+window.addEventListener("keydown", handlePlayBySpace); //Enter를 입력 시 플레이/일시정지
+video.addEventListener("keydown", handlePlayBySpace); //Enter를 입력 시 플레이/일시정지
+
+// 볼륨
+muteBtn.addEventListener("click", handleMuteClick); // 음소거 버튼 On/Off
+volumeRange.addEventListener("input", handleVolumeChange); // 볼륨 라인 조작
+
+// 타임라인
+video.addEventListener("loadedmetadata", handleLoadedMetadata); // 메타데이터에서 비디오지속시간 받아오기
+video.addEventListener("timeupdate", handleTimeUpdate); // 시간이 업데이트 될 때마다, 타임라인 갱신
+timeLine.addEventListener("input", handleTimelineChange); // 타임라인을 갱신하여 플레이타임 갱신
+timeLine.addEventListener("change", handleTimelineSet); // 타임라인을 조작해도 재생/일시정지 값 유지
+video.addEventListener("ended", handleVideoEnded); // 비디오 끝났을 때 초기화
