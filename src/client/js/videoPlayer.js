@@ -109,10 +109,13 @@ const handletimelineSet = () => {
   setVideoPlayStatus = false;
 };
 
-const handleVideoEnded = () => {
+const handleVideoEnded = async () => {
   video.currentTime = 0;
   timeline.value = 0;
   playBtn.innerText = "Play";
+
+  const { id } = videoContainer.dataset;
+  await fetch(`/api/videos/${id}/view`, { method: "POST" });
 };
 
 const handleTimelineByArrow = (seconds) => {
