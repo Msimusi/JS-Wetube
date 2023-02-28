@@ -11,6 +11,7 @@ const fullScreenBtn = document.getElementById("fullScreen");
 const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
+const textarea = document.querySelector("textarea");
 
 let controlsMovementTimeout = null;
 let controlsTimeout = null;
@@ -174,37 +175,45 @@ video.addEventListener("ended", handleVideoEnded); // 비디오 끝났을 때 �
 
 //기타
 fullScreenBtn.addEventListener("click", handleFullScreen); // 전체화면 버튼 on/Off
-window.addEventListener("keyup", (event) => {
-  if (event.key === "m") {
-    // M 누르면 음소거 on/off
-    handleMuteClick();
-  }
+document.addEventListener("keyup", (event) => {
+  if (event.target == textarea) {
+    return;
+  } else {
+    if (event.key === "m") {
+      // M 누르면 음소거 on/off
+      handleMuteClick();
+    }
 
-  if (event.key === "f") {
-    // f 누르면 전체화면 on/off
-    handleFullScreen();
+    if (event.key === "f") {
+      // f 누르면 전체화면 on/off
+      handleFullScreen();
+    }
   }
 });
 document.addEventListener("keydown", (event) => {
-  if (event.code == "Space") {
-    // 스페이스 재생, 일시정지
-    handlePlayClick();
-  }
-  if (event.key === "ArrowUp") {
-    // 위 화살표 볼륨 업
-    handleVolumeByArrow(0.1);
-  }
-  if (event.key === "ArrowDown") {
-    // 아래 화살표 볼륨 다운
-    handleVolumeByArrow(-0.1);
-  }
+  if (event.target == textarea) {
+    return;
+  } else {
+    if (event.code == "Space") {
+      // 스페이스 재생, 일시정지
+      handlePlayClick();
+    }
+    if (event.key === "ArrowUp") {
+      // 위 화살표 볼륨 업
+      handleVolumeByArrow(0.1);
+    }
+    if (event.key === "ArrowDown") {
+      // 아래 화살표 볼륨 다운
+      handleVolumeByArrow(-0.1);
+    }
 
-  if (event.key === "ArrowRight") {
-    // 왼쪽 화살표 시간 되감기
-    handleTimelineByArrow(5);
-  }
-  if (event.key === "ArrowLeft") {
-    // 오른쪽 화살표 시간 빨리감기
-    handleTimelineByArrow(-5);
+    if (event.key === "ArrowRight") {
+      // 왼쪽 화살표 시간 되감기
+      handleTimelineByArrow(5);
+    }
+    if (event.key === "ArrowLeft") {
+      // 오른쪽 화살표 시간 빨리감기
+      handleTimelineByArrow(-5);
+    }
   }
 });

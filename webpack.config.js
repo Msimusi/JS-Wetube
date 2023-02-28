@@ -1,21 +1,23 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
+const BASE_JS = "./src/client/js/";
+
 module.exports = {
   entry: {
-    main: "./src/client/js/main.js",
-    videoplayer: "./src/client/js/videoPlayer.js",
-    recorder: "./src/client/js/recorder.js",
+    main: BASE_JS + "main.js",
+    videoplayer: BASE_JS + "videoPlayer.js",
+    recorder: BASE_JS + "recorder.js",
+    commentSection: BASE_JS + "commentSection.js",
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
     }),
   ],
-  mode: "development",
 
   // 자동 업데이트, 나중에 필요하면 활성화 ㄱㄱ
-  watch: true,
+
   watchOptions: {
     ignored: /node_modules/,
   },
