@@ -18,6 +18,22 @@
     }
   }
 }
+.video__commentform {
+  display: flex;
+  flex-direction: column;
+  textarea {
+    border-radius: 5px;
+  }
+
+  button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
 .video__comments {
   display: flex;
   flex-direction: column;
@@ -26,17 +42,23 @@
   margin: 0 auto;
   margin-top: 20px;
   .video__comment {
+    display: flex;
     padding: 10px;
-    border-radius: 9999px;
+    border-radius: 5px;
     background-color: white;
     color: black;
     margin-bottom: 10px;
+    .comment__icon {
+      width: 10%;
+      text-align: center;
+    }
+    .comment__content {
+      width: 80%;
+      padding-left: 5px;
+    }
+    .comment__deleteBtn {
+      width: 10%;
+      text-align: center;
+    }
   }
-}
-
-#delete__comment:hover {
-  cursor: pointer;
-}
-#temp__comment:hover {
-  cursor: pointer;
 }
