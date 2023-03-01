@@ -86,6 +86,10 @@ const handleLoadedMetadata = () => {
   timeline.max = Math.floor(video.duration);
 };
 
+video.readyState > 0
+  ? handleLoadedMetadata()
+  : video.addEventListener("loadedmetadata", handleLoadedMetadata);
+
 const handleTimeUpdate = () => {
   currentTime.innerText = formatTime(Math.floor(video.currentTime));
   timeline.value = Math.floor(video.currentTime);
