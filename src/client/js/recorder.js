@@ -1,4 +1,4 @@
-const startBtn = document.getElementById("startBtn");
+const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
 let stream;
@@ -15,19 +15,19 @@ const handleDownload = () => {
 };
 
 const handleStop = () => {
-  startBtn.innerText = "Download the Record";
+  actionBtn.innerText = "Download the Record";
   buttonStatus = "recordDownload";
-  startBtn.removeEventListener("click", handleStop);
-  startBtn.addEventListener("click", handleDownload);
+  actionBtn.removeEventListener("click", handleStop);
+  actionBtn.addEventListener("click", handleDownload);
 
   recorder.stop();
 };
 
 const handleStart = () => {
-  startBtn.innerText = "Stop Recording";
+  actionBtn.innerText = "Stop Recording";
   buttonStatus = "recordStop";
-  startBtn.removeEventListener("click", handleStart);
-  startBtn.addEventListener("click", handleStop);
+  actionBtn.removeEventListener("click", handleStart);
+  actionBtn.addEventListener("click", handleStop);
 
   recorder = new MediaRecorder(stream);
 
@@ -52,4 +52,4 @@ const init = async () => {
 
 init();
 
-startBtn.addEventListener("click", handleStart);
+actionBtn.addEventListener("click", handleStart);
