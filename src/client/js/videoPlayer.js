@@ -166,9 +166,6 @@ volumeRange.addEventListener("input", handleVolumeChange); // 볼륨 라인 조�
 
 // 타임라인
 video.addEventListener("play", handleLoadedMetadata); // 메타데이터에서 비디오지속시간 받아오기
-video.readyState > 0
-  ? handleLoadedMetadata()
-  : video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate); // 시간이 업데이트 될 때마다, 타임라인 갱신
 videoContainer.addEventListener("mousemove", handleMouseMove); // 마우스가 위에서 움직일 때 컨트롤러 보여주기
 videoContainer.addEventListener("mouseleave", handleMouseLeave); // 마우스가 떨어지면 컨트롤러 감춤
