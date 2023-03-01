@@ -113,7 +113,7 @@ const handletimelineSet = () => {
 const handleVideoEnded = async () => {
   video.currentTime = 0;
   timeline.value = 0;
-  playBtn.className = "fas fa-play";
+  playBtnIcon.className = "fas fa-play";
 
   const { id } = videoContainer.dataset;
   await fetch(`/api/videos/${id}/view`, { method: "POST" });
