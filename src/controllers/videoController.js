@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+
 // Video.find({}, (error, videos) => {})
 
 // 홈
@@ -16,7 +17,7 @@ export const home = async (req, res) => {
 //비디오 시청
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner");
+  const video = await Video.findById(id).populate("owner").populate("comments");
 
   // 비디오 없음 에러
   if (!video) {
@@ -39,6 +40,7 @@ export const getEdit = async (req, res) => {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
   if (String(video.owner) !== String(req.session.user._id)) {
+    req.flash("error", "Not Authorized");
     return res.status(403).redirect("/");
   }
 
@@ -50,8 +52,8 @@ export const getEdit = async (req, res) => {
 
 export const postEdit = async (req, res) => {
   const { id } = req.params;
-  const { title, description, hashtags } = req.body;
   const video = await Video.exists({ _id: id });
+  const { title, description, hashtags } = req.body;
 
   // 에러!
   if (!video) {
@@ -64,6 +66,7 @@ export const postEdit = async (req, res) => {
     hashtags: Video.formatHashtags(hashtags),
   });
 
+  req.flash("success", "Changes saved.");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -96,7 +99,6 @@ export const postUpload = async (req, res) => {
 
     return res.redirect("/");
   } catch (error) {
-    console.log(error);
     return res.render("upload", {
       pageTitle: "Upload Video",
       errorMessage: error._message,
@@ -139,10 +141,11 @@ export const search = async (req, res) => {
 export const registerView = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
+
   if (!video) {
     return res.sendStatus(404);
   }
-  video.meta.views = video.meta.views + 1;
+  video.meta.views++;
   await video.save();
   return res.sendStatus(200);
 };
@@ -164,5 +167,33 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id);
   video.save();
+
+  // 유저 데이터에 커멘트 데이터 연동
+
   return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    params: { commentId },
+  } = req;
+
+  const comment = await Comment.findById(commentId).populate("owner");
+  const videoId = comment.video;
+  if (String(_id) !== String(comment.owner._id)) {
+    return res.sendStatus(404);
+  }
+  const video = await Video.findById(videoId);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  video.comments.splice(video.comments.indexOf(commentId), 1);
+  await video.save();
+  await Comment.findByIdAndDelete(commentId);
+
+  return res.sendStatus(200);
 };
