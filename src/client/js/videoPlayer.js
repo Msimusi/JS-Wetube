@@ -175,6 +175,8 @@ video.addEventListener("ended", handleVideoEnded); // 비디오 끝났을 때 �
 
 //기타
 fullScreenBtn.addEventListener("click", handleFullScreen); // 전체화면 버튼 on/Off
+
+// 키 입력 대응
 document.addEventListener("keyup", (event) => {
   if (event.target == textarea) {
     return;

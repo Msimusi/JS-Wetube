@@ -6,7 +6,7 @@ import flash from "express-flash";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
-import { awsLogger, localsMiddleware } from "./middlewares";
+import { localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
 
 const app = express();
@@ -15,7 +15,6 @@ const logger = morgan("dev");
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
-app.use(awsLogger);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
