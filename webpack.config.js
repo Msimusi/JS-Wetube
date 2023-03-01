@@ -6,7 +6,7 @@ const BASE_JS = "./src/client/js/";
 module.exports = {
   entry: {
     main: BASE_JS + "main.js",
-    videoplayer: BASE_JS + "videoPlayer.js",
+    videoPlayer: BASE_JS + "videoPlayer.js",
     recorder: BASE_JS + "recorder.js",
     commentSection: BASE_JS + "commentSection.js",
   },
@@ -15,8 +15,6 @@ module.exports = {
       filename: "css/styles.css",
     }),
   ],
-
-  // 자동 업데이트, 나중에 필요하면 활성화 ㄱㄱ
 
   watchOptions: {
     ignored: /node_modules/,
