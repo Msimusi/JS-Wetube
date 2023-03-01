@@ -2,6 +2,8 @@ import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 // Video.find({}, (error, videos) => {})
 
 // 홈
@@ -76,8 +78,8 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  const fileUrl = isHeroku ? req.file.location : req.file.path;
   const {
-    file: { location: fileUrl },
     body: { title, description, hashtags },
     session: {
       user: { _id: owner },

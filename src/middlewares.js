@@ -20,10 +20,13 @@ const s3VideoUploader = multerS3({
   acl: "public-read",
 });
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 export const localsMiddleware = (req, res, next) => {
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.siteName = "Wetube";
   res.locals.loggedInUser = req.session.user || {};
+  res.locals.isHeroku = isHeroku;
   next();
 };
 
@@ -48,10 +51,10 @@ export const publicOnlyMiddleware = (req, res, next) => {
 export const avatarUpload = multer({
   dest: "uploads/avatars",
   limits: { fileSize: 10000000 },
-  storage: s3ImageUploader,
+  storage: isHeroku ? s3ImageUploader : undefined,
 });
 export const videoUpload = multer({
   dest: "uploads/video",
   limits: { fileSize: 100000000 },
-  storage: s3VideoUploader,
+  storage: isHeroku ? s3VideoUploader : undefined,
 });
