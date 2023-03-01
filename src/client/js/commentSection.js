@@ -29,6 +29,7 @@ const handleSubmit = async (event) => {
   if (text === "") {
     return;
   }
+  textarea.value = "";
   const response = await fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
     headers: { "Content-type": "application/json" }, // information about request
@@ -36,12 +37,11 @@ const handleSubmit = async (event) => {
   });
 
   if (response.status === 201) {
-    textarea.value = "";
     const json = await response.json(); // json 추출.
     addComment(text, json.newCommentId);
-    deleteComment = document.getElementById("delete__comment");
-    deleteComment.removeEventListener("click", handleDeleteComment);
-    deleteComment.addEventListener("click", handleDeleteComment);
+    deleteCommentBtn = document.getElementById("delete__comment");
+    deleteCommentBtn.removeEventListener("click", handleDeleteComment);
+    deleteCommentBtn.addEventListener("click", handleDeleteComment);
   }
   // window.location.reload();
 };
