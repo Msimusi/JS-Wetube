@@ -6,7 +6,7 @@ import flash from "express-flash";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
-import { localsMiddleware } from "./middlewares";
+import { awsLogger, localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
 
 const app = express();
