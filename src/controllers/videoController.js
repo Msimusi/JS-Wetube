@@ -21,6 +21,8 @@ export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id).populate("owner").populate("comments");
 
+  console.log(video.comments);
+
   // 비디오 없음 에러
   if (!video) {
     return res.render("404", { pageTitle: "Video not found" });
