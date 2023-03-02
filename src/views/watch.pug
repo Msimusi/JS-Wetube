@@ -47,8 +47,8 @@ block content
                         i.fas.fa-comment
                     div.comment__content
                         pre  #{comment.text}
-                    div.comment__delete
-                        if String(loggedInUser._id) === String(comment.owner._id)
+                    if String(loggedInUser._id) === String(comment.owner._id)
+                        div.comment__delete
                             span#deleteBtn__comment ❌
 
 
