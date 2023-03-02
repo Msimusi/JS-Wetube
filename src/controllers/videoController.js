@@ -12,6 +12,8 @@ export const home = async (req, res) => {
     const videos = await Video.find({})
       .sort({ createdAt: "desc" })
       .populate("owner");
+    console.log(videos);
+    console.log(videos[0].thumbUrl);
     return res.render("home", { pageTitle: "Home", videos });
   } catch {
     return res.render("404");
@@ -22,6 +24,8 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id).populate("owner").populate("comments");
+  console.log(video);
+  console.log(video.fileUrl);
 
   // 비디오 없음 에러
   if (!video) {
@@ -80,7 +84,7 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  const fileUrl = isHeroku ? req.file.location : req.file.path;
+  const { video, thumb } = req.files;
   const {
     body: { title, description, hashtags },
     session: {
@@ -92,7 +96,8 @@ export const postUpload = async (req, res) => {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: isHeroku ? video[0].location : video[0].path,
+      thumbUrl: isHeroku ? thumb[0].location : video[0].path,
       owner,
       hashtags: Video.formatHashtags(hashtags),
     });
