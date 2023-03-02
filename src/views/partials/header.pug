@@ -19,7 +19,7 @@ header
                             i.fa-regular.fa-face-smile
                         else
                             if isHeroku 
-                                img.header__avatar(src=loggedInUser.avatarUrl)
+                                img.header__avatar(src=loggedInUser.avatarUrl crossorigin)
                             else
                                 img.header__avatar(src="/" + loggedInUser.avatarUrl) 
             else
