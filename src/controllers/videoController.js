@@ -144,7 +144,7 @@ export const search = async (req, res) => {
       },
     });
   }
-  return res.render("Search", { pageTitle: "Search Video", videos });
+  return res.render("search", { pageTitle: "Search Video", videos });
 };
 
 export const registerView = async (req, res) => {
