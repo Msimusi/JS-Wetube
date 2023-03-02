@@ -24,14 +24,30 @@ block content
                     i.fas.fa-expand
     
     div.video__data
-        p.video__title=video.title
-        small.video__owner Uploaded by 
-            a(href=`/users/${video.owner._id}`)=video.owner.name
-        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
-        if String(video.owner._id) === String(loggedInUser._id)
-            a(href=`${video.id}/edit`) Edit Video &rarr;
-            br
-            a(href=`${video.id}/delete`) Delete Video &rarr;
+        div.video__header 
+            p.video__title=video.title
+            small.video__owner Uploader
+                br
+                a(href=`/users/${video.owner._id}`)=video.owner.name
+            small.video__views view counts 
+                br 
+                span #{video.meta.views}
+        
+        div.video__header
+            small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+            if String(video.owner._id) === String(loggedInUser._id)
+                div.button
+                    a(href=`${video.id}/edit`) Edit Video
+                br
+                div.button
+                    a(href=`${video.id}/delete`) Delete Video
+        br
+        span.video__description-header DESCRIPTION
+        br
+        span.video__description=video.description
+        br
+        
+
 
     if loggedIn
         div.video__add-comments
