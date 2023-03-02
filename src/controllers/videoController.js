@@ -80,7 +80,7 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  const fileUrl = isHeroku ? req.file.location : req.file.path;
+  const { video, thumb } = req.files;
   const {
     body: { title, description, hashtags },
     session: {
@@ -92,7 +92,8 @@ export const postUpload = async (req, res) => {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: isHeroku ? video[0].location : video[0].path,
+      thumbUrl: isHeroku ? thumb[0].location : thumb[0].path,
       owner,
       hashtags: Video.formatHashtags(hashtags),
     });
