@@ -23,7 +23,6 @@ const videoSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
-  thumbUrl: { type: String, required: true },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   description: { type: String, required: true, trim: true, minLength: 20 },
   createdAt: { type: Date, required: true, default: Date.now },
