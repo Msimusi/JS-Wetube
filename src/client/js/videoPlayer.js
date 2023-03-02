@@ -13,6 +13,8 @@ const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 const textarea = document.querySelector("textarea");
 
+console.dir(videoContainer.dataset);
+
 let controlsMovementTimeout = null;
 let controlsTimeout = null;
 let videoPlayStatus = false;
