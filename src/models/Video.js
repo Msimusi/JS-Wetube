@@ -18,6 +18,7 @@ const videoSchema = new mongoose.Schema({
     maxLength: 30,
   },
   fileUrl: { type: String, required: true },
+  thumbUrl: { type: String, required: true },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

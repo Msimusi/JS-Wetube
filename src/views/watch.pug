@@ -2,6 +2,7 @@ extends base
 
 block content
     div#videoContainer(data-Id=video._id)
+        img(src= `/${video.thumbUrl}`)
         if isHeroku 
             video(src=video.fileUrl, tabindex="0", )
         else 
