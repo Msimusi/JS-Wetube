@@ -46,7 +46,7 @@ block content
                     div.comment__icon
                         i.fas.fa-comment
                     div.comment__content
-                        span  #{comment.text}
+                        pre  #{comment.text}
                     div.comment__deleteBtn
                         if String(loggedInUser._id) === String(comment.owner._id)
                             span#delete__comment ❌
