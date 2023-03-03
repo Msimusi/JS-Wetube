@@ -3,7 +3,7 @@ extends base
 block content
     div#videoContainer(data-Id=video._id)
         if isHeroku 
-            video(src=video.fileUrl, tabindex="0", crossorigin)
+            video(src=video.fileUrl, tabindex="0")
         else 
             video(src="/" + video.fileUrl, tabindex="0")
         div#videoControls.videoControls
