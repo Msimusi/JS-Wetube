@@ -25,11 +25,11 @@ const downloadFile = (fileUrl, fileName) => {
   a.click();
 };
 
-const transcodeVideo = async () => {
+const transcodeVideo = async (file) => {
   if (!ffmpeg.isLoaded()) {
     await ffmpeg.load();
   }
-  ffmpeg.FS("writeFile", files.input, await fetchFile(uploadingFile));
+  ffmpeg.FS("writeFile", files.input, await fetchFile(file));
   await ffmpeg.run("-i", files.input, "-r", "60", files.output);
 
   const mp4File = ffmpeg.FS("readFile", files.output);
@@ -45,11 +45,11 @@ const transcodeVideo = async () => {
   URL.revokeObjectURL(uploadingFile);
 };
 
-const thumbnailExport = async () => {
+const thumbnailExport = async (file) => {
   if (!ffmpeg.isLoaded()) {
     await ffmpeg.load();
   }
-  ffmpeg.FS("writeFile", files.input, await fetchFile(uploadingFile));
+  ffmpeg.FS("writeFile", files.input, await fetchFile(file));
   await ffmpeg.run(
     "-i",
     files.input,
@@ -76,8 +76,8 @@ const uploadingFiletranscode = async () => {
   transcodeBtn.innerText = "Transcoding...";
   transcodeBtn.disabled = true;
 
-  await transcodeVideo();
-  await thumbnailExport();
+  await transcodeVideo(uploadingFile);
+  await thumbnailExport(uploadingFile);
 
   transcodeBtn.disabled = false;
   transcodeBtn.innerText = "Transcode Complete";
