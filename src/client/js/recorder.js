@@ -3,7 +3,8 @@ const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 const transcodeBtn = document.getElementById("transcode");
 const autoThumbnailBtn = document.getElementById("autoThumbnail");
-const notRecordedVideo = document.getElementById("video");
+const videoInput = document.getElementById("video");
+const thumbInput = document.getElementById("thumb");
 const ffmpeg = createFFmpeg({ log: true });
 
 let stream;
@@ -38,6 +39,14 @@ const transcodeVideo = async (file) => {
 
   downloadFile(mp4Url, "MyRecording.mp4");
 
+  const videoFileObj = new File([mp4Blob], "TranscodedVideo.jpg", {
+    type: "video/mp4",
+  });
+  const dataTransfer = new DataTransfer();
+
+  dataTransfer.items.add(videoFileObj);
+  videoInput.files = dataTransfer.files;
+
   ffmpeg.FS("unlink", files.input);
   ffmpeg.FS("unlink", files.output);
 
@@ -65,6 +74,14 @@ const thumbnailExport = async (file) => {
   const thumbUrl = URL.createObjectURL(thumbBlob);
 
   downloadFile(thumbUrl, "MyThumbnail.jpg");
+
+  const thumbFileObj = new File([thumbBlob], "AutoThumbnail.jpg", {
+    type: "image/jpg",
+  });
+  const dataTransfer = new DataTransfer();
+
+  dataTransfer.items.add(thumbFileObj);
+  thumbInput.files = dataTransfer.files;
 
   ffmpeg.FS("unlink", files.thumb);
 
@@ -139,7 +156,7 @@ init();
 
 actionBtn.addEventListener("click", handleStart);
 
-notRecordedVideo.addEventListener("change", (event) => {
+videoInput.addEventListener("change", (event) => {
   uploadingFile = event.target.files[0];
 
   transcodeBtn.disabled = false;
@@ -148,5 +165,7 @@ notRecordedVideo.addEventListener("change", (event) => {
   autoThumbnailBtn.style.display = "block";
 
   transcodeBtn.addEventListener("click", uploadingFiletranscode);
-  autoThumbnailBtn.addEventListener("click", thumbnailExport);
+  autoThumbnailBtn.addEventListener("click", () => {
+    thumbnailExport(uploadingFile);
+  });
 });
