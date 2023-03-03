@@ -112,8 +112,6 @@ const handleDownload = async () => {
 
   actionBtn.disabled = false;
   actionBtn.innerText = "Record Again";
-  video.srcObject = stream;
-  video.play();
   actionBtn.addEventListener("click", handleStart);
 };
 
@@ -129,7 +127,8 @@ const handleStart = () => {
   actionBtn.innerText = "Stop Recording";
   actionBtn.removeEventListener("click", handleStart);
   actionBtn.addEventListener("click", handleStop);
-
+  video.srcObject = stream;
+  video.play();
   recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
 
   recorder.ondataavailable = (event) => {
