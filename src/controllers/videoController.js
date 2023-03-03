@@ -12,6 +12,7 @@ export const home = async (req, res) => {
     const videos = await Video.find({})
       .sort({ createdAt: "desc" })
       .populate("owner");
+    console.log(videos);
     return res.render("home", { pageTitle: "Home", videos });
   } catch {
     return res.render("404");
@@ -22,7 +23,7 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id).populate("owner").populate("comments");
-
+  // console.log(video);
   // 비디오 없음 에러
   if (!video) {
     return res.render("404", { pageTitle: "Video not found" });
@@ -56,9 +57,11 @@ export const getEdit = async (req, res) => {
 
 export const postEdit = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.exists({ _id: id });
+  const video = await Video.findOne({ _id: id });
   const { title, description, hashtags } = req.body;
-
+  const thumbUrl = isHeroku ? req.file.location : req.file.path;
+  // console.log(video);
+  console.log(thumbUrl);
   // 에러!
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found" });
@@ -67,9 +70,11 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
+    thumbUrl,
     hashtags: Video.formatHashtags(hashtags),
   });
 
+  // console.log(video);
   req.flash("success", "Changes saved.");
   return res.redirect(`/videos/${id}`);
 };
