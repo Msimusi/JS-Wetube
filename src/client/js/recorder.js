@@ -112,6 +112,8 @@ const handleDownload = async () => {
 
   actionBtn.disabled = false;
   actionBtn.innerText = "Record Again";
+  video.srcObject = stream;
+  video.play();
   actionBtn.addEventListener("click", handleStart);
 };
 
