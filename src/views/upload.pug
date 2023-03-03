@@ -10,7 +10,8 @@ block content
         form(method="POST", enctype="multipart/form-data")
             label(for="video").upload__video-label 
                 span Video File
-                button#transcode Transcode
+                button#transcode Transcode Video
+                button#autoThumbnail Export Thumbnail
             input(type="file", accept="video/*", required, id="video", name="video")
             label(for="thumb") Thumbnail File
             input(type="file", accept="image/*", required, id="thumb", name="thumb")
