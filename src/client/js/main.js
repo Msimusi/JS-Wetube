@@ -13,11 +13,10 @@ window.addEventListener("beforeinstallprompt", function (e) {
   return false;
 });
 
-console.log(downloadBtn);
-
 // 특정 버튼 클릭 시 설치 시작
 downloadBtn.addEventListener("click", function () {
   console.log("clicked");
+  console.log(deferredPrompt);
   if (deferredPrompt !== undefined) {
     // The user has had a postive interaction with our app and Chrome
     // has tried to prompt previously, so let's show the prompt.
