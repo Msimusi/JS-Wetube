@@ -2,10 +2,13 @@ extends base
 include mixins/video
 
 block manifest 
-    <link rel="manifest" href="./manifest.json"/>
+    <link rel="manifest" href="/static/manifest.json"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
 
 block content
+    div 
+        button#btnSave Download
+
     div.video-grid
         each video in videos
             +video(video)

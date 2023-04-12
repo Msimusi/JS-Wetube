@@ -1,5 +1,3 @@
-import "../scss/styles.scss";
-
 let deferredPrompt;
 
 window.addEventListener("beforeinstallprompt", function (e) {
@@ -11,9 +9,6 @@ window.addEventListener("beforeinstallprompt", function (e) {
 
   return false;
 });
-
-btnSave = document.getElementById("btnSave");
-console.log(btnSave);
 
 // 특정 버튼 클릭 시 설치 시작
 btnSave.addEventListener("click", function () {
