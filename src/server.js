@@ -35,6 +35,7 @@ app.use(
 app.use(flash());
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
+app.use("/webAppInstall", express.static("webAppInstall"));
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
