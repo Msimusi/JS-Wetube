@@ -1,6 +1,7 @@
 import "../scss/styles.scss";
 
 let deferredPrompt;
+const downloadBtn = document.getElementById("Btn");
 
 window.addEventListener("beforeinstallprompt", function (e) {
   console.log("beforeinstallprompt Event fired");
@@ -12,11 +13,11 @@ window.addEventListener("beforeinstallprompt", function (e) {
   return false;
 });
 
-btnSave = document.getElementById("btnSave");
-console.log(btnSave);
+console.log(downloadBtn);
 
 // 특정 버튼 클릭 시 설치 시작
-btnSave.addEventListener("click", function () {
+downloadBtn.addEventListener("click", function () {
+  console.log("clicked");
   if (deferredPrompt !== undefined) {
     // The user has had a postive interaction with our app and Chrome
     // has tried to prompt previously, so let's show the prompt.
